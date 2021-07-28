@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import CheckoutItem from '../../components/Checkout-item/checkout.component';
+import CheckoutItem from '../../components/Checkout-item/checkout-item.component';
 import {
   selectCartItems,
   selectCartTotal,
