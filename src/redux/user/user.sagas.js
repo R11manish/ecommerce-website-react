@@ -12,6 +12,8 @@ import {
   signInFailure,
   signOutSuccess,
   signOutFailure,
+  signUpFailure,
+  signUpSuccess,
 } from './user.actions';
 
 export function* signOut() {
@@ -20,6 +22,21 @@ export function* signOut() {
     yield put(signOutSuccess());
   } catch (error) {
     yield put(signOutFailure(error));
+  }
+}
+
+//  signup execution
+
+export function* signUpWithEmail({
+  payload: { email, password, displayName }
+}) {
+  try {
+    const { user } = yield auth.createUserWithEmailAndPassword(email, password);
+    yield createUserProfileDocument(user, { displayName });
+    yield put(signUpSuccess(user));
+    yield getSnapshotFromUserAuth(user);
+  } catch (error) {
+    yield put(signUpFailure(error));
   }
 }
 
@@ -82,11 +99,19 @@ export function* onSignOutStart() {
   yield takeLatest(UserActionTypes.SIGN_OUT_START, signOut);
 }
 
+// new listener for   signup action
+
+export function* onSignUpStart() {
+  yield takeLatest(UserActionTypes.SIGN_UP_START, signUpWithEmail);
+}
+
+// exporting all in one
 export function* userSagas() {
   yield all([
     call(onGoogleSignInStart),
     call(onEmailSignInStart),
     call(onCheckUserSession),
     call(onSignOutStart),
+    call(onSignUpStart),
   ]);
 }

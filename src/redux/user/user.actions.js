@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import UserActionTypes from './user.types';
 
 export const googleSignInStart = () => ({
@@ -33,5 +34,22 @@ export const signOutSuccess = () => ({
 
 export const signOutFailure = (error) => ({
   type: UserActionTypes.SIGN_OUT_FAILURE,
-  payload : error
+  payload: error,
+});
+
+// signup section from here onwards
+
+export const signUpStart = (userInfo) => ({
+  type: UserActionTypes.SIGN_UP_START,
+  payload: userInfo,
+});
+
+export const signUpSuccess = (user) => ({
+  type: UserActionTypes.SIGN_UP_SUCCESS,
+  payload: user,
+});
+
+export const signUpFailure = (error) => ({
+  type: UserActionTypes.SIGN_UP_SUCCESS,
+  payload: error,
 });
