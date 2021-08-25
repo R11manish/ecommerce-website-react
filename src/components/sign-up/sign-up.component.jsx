@@ -2,9 +2,6 @@ import React from 'react';
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/cutom-button.component';
 import { connect } from 'react-redux';
-
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utlis';
-
 import { SignUpContainer, SignUpTitle } from './sign-up.styles';
 import { signUpStart } from '../../redux/user/user.actions';
 

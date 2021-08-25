@@ -28,16 +28,18 @@ export function* signOut() {
 //  signup execution
 
 export function* signUpWithEmail({
-  payload: { email, password, displayName }
+  payload: { email, password, displayName },
 }) {
   try {
     const { user } = yield auth.createUserWithEmailAndPassword(email, password);
-    yield createUserProfileDocument(user, { displayName });
-    yield put(signUpSuccess(user));
-    yield getSnapshotFromUserAuth(user);
+    yield put(signUpSuccess({ user, additionalData: { displayName } }));
   } catch (error) {
     yield put(signUpFailure(error));
   }
+}
+
+export function* signInAfterSignUp({ payload: { user, additionalData } }) {
+  yield getSnapshotFromUserAuth(user, additionalData);
 }
 
 export function* getSnapshotFromUserAuth(userAuth) {
@@ -105,6 +107,10 @@ export function* onSignUpStart() {
   yield takeLatest(UserActionTypes.SIGN_UP_START, signUpWithEmail);
 }
 
+export function* onSignUpSuccess() {
+  yield takeLatest(UserActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp);
+}
+
 // exporting all in one
 export function* userSagas() {
   yield all([
@@ -113,5 +119,6 @@ export function* userSagas() {
     call(onCheckUserSession),
     call(onSignOutStart),
     call(onSignUpStart),
+    call(onSignUpSuccess),
   ]);
 }
